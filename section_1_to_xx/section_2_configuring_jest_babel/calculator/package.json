@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "jest",
     "dev": "webpack-dev-server --mode=development",
     "build": "webpack --mode=production",
     "start": "serve -s dist --port 8080"
@@ -12,6 +13,8 @@
   "author": "Kent C. Dodds <kent@doddsfamily.us> (http://kentcdodds.com/)",
   "license": "MIT",
   "devDependencies": {
+    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-react": "^7.9.4",
     "babel-core": "6.26.0",
     "babel-loader": "7.1.4",
     "babel-plugin-transform-class-properties": "6.24.1",
@@ -20,6 +23,7 @@
     "babel-preset-react": "6.24.1",
     "css-loader": "0.28.11",
     "file-loader": "1.1.11",
+    "jest": "^25.2.2",
     "serve": "6.5.5",
     "style-loader": "0.20.3",
     "webpack": "4.5.0",
@@ -31,8 +35,5 @@
     "react-dom": "16.3.1",
     "react-loadable": "5.3.1",
     "react-point": "3.0.1"
-  },
-  "babel": {
-    "presets": "./.babelrc.js"
   }
 }
