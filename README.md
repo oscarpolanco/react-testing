@@ -64,3 +64,31 @@ The `testEnviroment` target the module in charge of set the enviroment in this c
     "testEnviroment": "node"
   }
 ```
+
+### Css imports
+
+Sometimes we `import` `css` files on our components and that is an issue with `jest` because it will try to handle the file as a js module; we are using `node` so it will try those `import` as a `JSON` or `js module`. To handel this case you will need to create a config file for `jest` with the name `jest.config.js` and export a propety call `moduleNameMapper`.
+```js
+module.exports = {
+    moduleNameMapper: {
+        '\\.css$': require.resolve('./test/style-mock')
+    }
+}
+```
+
+The `moduleNameMapper` will recive a reguler expresion and require the path of a file that will export the object that you need for the mapping; in this case we create the `style-mock` on the `test` directory.
+
+You can use `css modules` for the case that you need to `import` a `css` file. To use `css modules` you just need to add `.module.css` at the en of the file that you need to `import`. This will get back an object that will have keys for every class name (the class name will change like this: `test-class` => `testClass`). With the previous configuration we got an empty object for style so we won't see the class name that we use so we need to add another module that will help us with this call `identity-obj-proxy` (A `proxy` will return what is at the rigth of the dot as it class name).
+
+#### Steps to set `css module` using `jest`:
+
+- On the root of the example project install the dependency: `npm install --save-dev identity-obj-proxy`
+- Add the following to your `jest.config.js` file
+```js
+module.exports = {
+    moduleNameMapper: {
+        '\\.module\\.css$': 'identity-obj-proxy',
+        '\\.css$': require.resolve('./test/style-mock')
+    }
+}
+```
