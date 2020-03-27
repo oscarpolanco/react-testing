@@ -48,3 +48,19 @@ module.exports = {
 #### Note:
 
 We got the `import` error because on an app that uses `Webpack` and `babel`; the `babel` configuration will transpile everything excepts for the `import` because `Webpack` support ESmodules so it can do [tree shaking](https://webpack.js.org/guides/tree-shaking/) that permit to skip some `import` which will remove that code and our bundles will be much smaller. On your `babelrc` on the `preset` property, you need to add the modules as `false` to have this functionality.
+
+### JSDOM
+
+By default `jest` load `JSDOM` on the `test` enviroment so by defult you can use the `windows` object on your test but you can configure this on your `package.json` because use a lot of memory. To configure it you can go to your `packege.json` and add this:
+```js
+"jest": {
+    "testEnviroment": "jest-enviroment-node"
+  }
+```
+
+The `testEnviroment` target the module in charge of set the enviroment in this case we want to use a `node` enviroment; if you need `JSDOM` you can put `jest-enviroment-jsdom` instead. By default all file that begin with `jest-enviroment-` will be the default partern that will search so you can put your configuration like this:
+```js
+"jest": {
+    "testEnviroment": "node"
+  }
+```
