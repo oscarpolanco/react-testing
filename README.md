@@ -92,3 +92,21 @@ module.exports = {
     }
 }
 ```
+
+#### Handing dynamic imports
+
+At this moment `node` doesn't support Es modules or dynamic imports and `jest` use `node` so `babel` have a transform that convert this dynamic import into it `node` equivalent that is a `require` statement that is turn into a promise to have the same effect. Just need to install `babel-plugin-dynamic-import-node` package like you will see on the following steps.
+
+- Install `babel-plugin-dynamic-import-node` using `npm install --save-dev babel-plugin-dynamic-import-node`
+- Go to your `babelrc` file and add the package only if you are on  test enviroment
+```js
+const isTest = String(process.env.NODE_ENV) === 'test';
+
+module.exports = {
+  presets: [['@babel/env', {modules: isTest ? 'commonjs' : false}], '@babel/react'],
+  plugins: [
+    isTest ? 'dynamic-import-node': null
+  ].filter(Boolean),
+}
+```
+
