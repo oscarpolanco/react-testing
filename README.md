@@ -110,3 +110,17 @@ module.exports = {
 }
 ```
 
+#### Set code before each test file is executed
+
+On this example we use `localStore` that doesn't exist on our test enviroment so we need to add a mock of it. To do this we only need to configure our `jest` config like thiis:
+```js
+module.exports = {
+    moduleNameMapper: {
+        ...
+    },
+    setupFilesAfterEnv: [require.resolve('./test/setup-test-framework')]
+}
+```
+
+The path is where we put our object that represent the `localStore`.
+
