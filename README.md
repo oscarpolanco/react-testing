@@ -158,3 +158,18 @@ module.exports = {
 #### Jest watch mode
 
 To add the `watch mode` for `jest` you just need to add `--watch` on your script into the `package.json`.
+
+#### Different jest configuration on the same project
+
+You can add different `jest` config files on your project; you just need to set the `projects` property on the config that is on the root of your project.
+```js
+module.exports = {
+    moduleNameMapper: {
+        ...
+    },
+    projects: [
+        './client',
+        './server'
+    ]
+}
+```
