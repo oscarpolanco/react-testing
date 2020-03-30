@@ -155,3 +155,6 @@ module.exports = {
 }
 ```
 
+#### Jest watch mode
+
+To add the `watch mode` for `jest` you just need to add `--watch` on your script into the `package.json`.
