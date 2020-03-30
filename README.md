@@ -95,10 +95,10 @@ module.exports = {
 
 #### Handing dynamic imports
 
-At this moment `node` doesn't support Es modules or dynamic imports and `jest` use `node` so `babel` have a transform that convert this dynamic import into it `node` equivalent that is a `require` statement that is turn into a promise to have the same effect. Just need to install `babel-plugin-dynamic-import-node` package like you will see on the following steps.
+At this moment `node` doesn't support Es modules or dynamic imports and `jest` use `node` so `babel` has a transform that converts this dynamic import into it `node` equivalent that is a `require` statement that turns into a promise to have the same effect. Just need to install `babel-plugin-dynamic-import-node` package as you will see on the following steps.
 
 - Install `babel-plugin-dynamic-import-node` using `npm install --save-dev babel-plugin-dynamic-import-node`
-- Go to your `babelrc` file and add the package only if you are on  test enviroment
+- Go to your `babelrc` file and add the package only if you are on the test environment
 ```js
 const isTest = String(process.env.NODE_ENV) === 'test';
 
@@ -112,7 +112,7 @@ module.exports = {
 
 #### Set code before each test file is executed
 
-On this example we use `localStore` that doesn't exist on our test enviroment so we need to add a mock of it. To do this we only need to configure our `jest` config like thiis:
+In this example, we use `localStore` that doesn't exist in our test environment so we need to add a mock of it. To do this we only need to configure our `jest` config like this:
 ```js
 module.exports = {
     moduleNameMapper: {
@@ -122,5 +122,36 @@ module.exports = {
 }
 ```
 
-The path is where we put our object that represent the `localStore`.
+The path is where we put our object that represents the `localStore`.
+
+#### Coverage
+
+With `jest` you just need to add `--coverage` on your `test` script in your `package.json` to have a `coverage` report. You can set some additional options in your `jest` configuration for the report.
+
+- To specify which files, you will be cover on the report you just need to add `collectCoverageFrom`
+```js
+module.exports = {
+    moduleNameMapper: {
+        ...
+    },
+    collectCoverageFrom: ['**/src/**/*.js']
+}
+```
+
+- To specify a minumun of `%` in each column of the report
+```js
+module.exports = {
+    moduleNameMapper: {
+        ...
+    },
+    coverageThreshold: {
+        global: {
+            statements: 18,
+            branches: 10,
+            functions: 19,
+            line: 18
+        }
+    }
+}
+```
 
