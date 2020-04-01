@@ -418,3 +418,4 @@ test('calls onSubmit with the username and password when submitted', () => {
   expect(submitButton.type).toBe('submit');
 });
 ```
+You can use `renderIntoDocument` that will add the component to the document so you can fire events without the `Simulate` function but it state on the document so you need to use the `cleanup` method after each test.
