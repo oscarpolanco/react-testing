@@ -303,6 +303,118 @@ expect(utilsMock.posts.create).toHaveBeenCalledWith({
 });
 ```
 
+### react-testing-library
 
+Here we gonna refactor our previews example to use the `react-testing-library`.
 
+First like always you need to `import` what you need
+```js
+import React from 'react';
+import {generate} from 'til-client-test-utils'
+import {render, Simulate} from 'react-testing-library'
+import Login from '../login';
+```
 
+Then you will need to mock some of the `props` that you need
+```js
+test('calls onSubmit with the username and password when submitted', () => {
+  // Arrange
+  // use generate.loginForm() that will generate a fake user for you
+  const fakeUser = generate.loginForm();
+  const handleSubmit = jest.fn();
+});
+```
+
+Next you will need to render your component
+```js
+test('calls onSubmit with the username and password when submitted', () => {
+  // Arrange
+  // use generate.loginForm() that will generate a fake user for you
+  const fakeUser = generate.loginForm();
+  const handleSubmit = jest.fn()
+
+  const { container, getByLabelText, getByText } = render(<Login onSubmit={handleSubmit} />);
+});
+```
+
+The `render` function will return 3 things:
+- The container where you render your component
+- The `getByLabelText` function that will return an element depending on the label that you send (The parameter can be sent as a string or regex and isn't case sensitive)
+- The `getByText` function that will return an element depending on the text that it renders The parameter can be sent as a string or regex and isn't case sensitive)
+
+Then you need to get all the `nodes` that you need
+```js
+import React from 'react';
+import {generate} from 'til-client-test-utils'
+import {render, Simulate} from 'react-testing-library'
+import Login from '../login';
+
+// Basic unit test
+test('calls onSubmit with the username and password when submitted', () => {
+  // Arrange
+  // use generate.loginForm() that will generate a fake user for you
+  const fakeUser = generate.loginForm();
+  const handleSubmit = jest.fn();
+  const { container, getByLabelText, getByText } = render(<Login onSubmit={handleSubmit} />);
+  const username = getByLabelText('username');
+  const password = getByLabelText('password');
+  const submitButton = getByText('submit');
+  const form = container.querySelector('form');
+});
+```
+Fill the `inputs` and submit your form
+```js
+import React from 'react';
+import {generate} from 'til-client-test-utils'
+import {render, Simulate} from 'react-testing-library'
+import Login from '../login';
+
+// Basic unit test
+test('calls onSubmit with the username and password when submitted', () => {
+  // Arrange
+  // use generate.loginForm() that will generate a fake user for you
+  const fakeUser = generate.loginForm();
+  const handleSubmit = jest.fn();
+  const { container, getByLabelText, getByText } = render(<Login onSubmit={handleSubmit} />);
+  const username = getByLabelText('username');
+  const password = getByLabelText('password');
+  const submitButton = getByText('submit');
+  const form = container.querySelector('form');
+
+  username.value = fakeUser.username;
+  password.value = fakeUser.password;
+
+  Simulate.submit(form);
+});
+``` 
+[Here](https://reactjs.org/docs/test-utils.html#simulate) a quick look of the `Simulate` function
+
+Then do again the assertions
+```js
+import React from 'react';
+import {generate} from 'til-client-test-utils'
+import {render, Simulate} from 'react-testing-library'
+import Login from '../login';
+
+// Basic unit test
+test('calls onSubmit with the username and password when submitted', () => {
+  // Arrange
+  // use generate.loginForm() that will generate a fake user for you
+  const fakeUser = generate.loginForm();
+  const handleSubmit = jest.fn();
+  const { container, getByLabelText, getByText } = render(<Login onSubmit={handleSubmit} />);
+  const username = getByLabelText('username');
+  const password = getByLabelText('password');
+  const submitButton = getByText('submit');
+  const form = container.querySelector('form');
+
+  username.value = fakeUser.username;
+  password.value = fakeUser.password;
+
+  Simulate.submit(form);
+
+  expect(handleSubmit).toHaveBeenCalledTimes(1);
+  expect(handleSubmit).toHaveBeenCalledWith(fakeUser);
+  expect(submitButton.type).toBe('submit');
+});
+```

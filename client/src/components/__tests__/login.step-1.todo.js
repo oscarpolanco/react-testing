@@ -1,41 +1,35 @@
+// using helpful utilities
 import React from 'react';
-import ReactDOM from 'react-dom';
+// you'll need these:
+import {generate} from 'til-client-test-utils'
+import {render, Simulate} from 'react-testing-library'
+// note that til-client-test-utils is found in `client/test/til-client-test-utils`
 import Login from '../login';
 
 // Basic unit test
 test('calls onSubmit with the username and password when submitted', () => {
   // Arrange
-  // create a fake object to hold the form field values (username and password)
-  // create a jest.fn() for your submit handler
-  // render the Login component to a div
-  // TIP: const div = document.createElement('div')
-  //
-  // get the field nodes
-  // TIP: const inputs = div.querySelectorAll('input')
-  // TIP: const form = div.querySelector('form')
-  // fill in the field values
-  //
-  // Act
-  // submit the form:
-  // TIP: formNode.dispatchEvent(new window.Event('submit'))
-  //
-  // Assert
-  // ensure your submit handler was called properly
-  const container = document.createElement('div');
-  const handleSubmit = jest.fn();
-  ReactDOM.render(<Login onSubmit={handleSubmit} />, container);
+  // use generate.loginForm() here
+  const fakeUser = generate.loginForm();
+  const handleSubmit = jest.fn()
+  // use: render(<Login onSubmit={handleSubmit} />)
+  // It'll give you back an object with
+  // `getByLabelText` and `getByText` functions
+  // so you don't need a div anymore!
+  const { container, getByLabelText, getByText } = render(<Login onSubmit={handleSubmit} />);
+  const username = getByLabelText('username');
+  const password = getByLabelText('password');
+  const submitButton = getByText('submit');
   const form = container.querySelector('form');
-  const { username, password } = form.elements;
-  username.value = 'foo';
-  password.value = 'test';
 
-  form.dispatchEvent(new window.Event('submit'));
+  username.value = fakeUser.username;
+  password.value = fakeUser.password;
+
+  // Act
+  // Use Simulate.submit(formNode) instead of these two lines
+  Simulate.submit(form);
 
   expect(handleSubmit).toHaveBeenCalledTimes(1);
-  expect(handleSubmit).toHaveBeenCalledWith({
-    username: username.value,
-    password: password.value
-  });
-
-
+  expect(handleSubmit).toHaveBeenCalledWith(fakeUser);
+  expect(submitButton.type).toBe('submit');
 });
