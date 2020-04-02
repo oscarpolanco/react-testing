@@ -419,3 +419,12 @@ test('calls onSubmit with the username and password when submitted', () => {
 });
 ```
 You can use `renderIntoDocument` that will add the component to the document so you can fire events without the `Simulate` function but it state on the document so you need to use the `cleanup` method after each test.
+
+## Section 4: Snapshot Testing
+
+On this section we will examine `Snapshop testing` that is a mechanism that take some value; serialize it into a string and compare it in the future when our test run.
+
+With `jest` you'll have a function call `toMatchSnapshot` that will assert what you need and it will create a file in a directory called `__snapshots__` a file with the same name of your test file and that `export` a serialize string that represents the things that you want to assert. Also `jest` allows you to configure what it takes when you are doing a `snapshop` and for the example, we use `glamorous` (css on js) and it will live on memory so `jest` is gonna search that style and put it on your `snapshot` and you just need to add `snapshotSerializers` property on your `jest` configuration like this:
+`snapshotSerializers: ['jest-glamor-react']`
+
+[Here](https://blog.kentcdodds.com/effective-snapshot-testing-e0d1a2c28eca) an useful article about `snapshot`
