@@ -428,3 +428,11 @@ With `jest` you'll have a function call `toMatchSnapshot` that will assert what 
 `snapshotSerializers: ['jest-glamor-react']`
 
 [Here](https://blog.kentcdodds.com/effective-snapshot-testing-e0d1a2c28eca) an useful article about `snapshot`
+
+## Section 5: Integration testing pages
+
+On this section we will check the approach that we need to do an integration test in the UI. Here we gonna concentrate on the public api so we are gonna test how the user will use the app instead of individual modules.
+
+First if you are making any request on your component you will need to `mock` the modules that allow you to preform that request because we don't want to prefrom a network request on this test we wait to have a `end to end` test for that.
+
+Also an important thing to take on notice is when you are `render` a component that use `redux`, `react router`, etc; anything that expose a provider you will need to render with that provider. In the example it use `renderWithRouter` that is a function that will help us to provide all the context that the component need to render. So you will want to have files that have this utilities that are especific for testing your app in every project.
