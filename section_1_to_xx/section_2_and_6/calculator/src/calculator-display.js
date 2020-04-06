@@ -10,7 +10,7 @@ class CalculatorDisplay extends React.Component {
 
     return (
       <div {...props} className={styles.calculatorDisplay}>
-        <AutoScalingText>{formattedValue}</AutoScalingText>
+        <AutoScalingText data-testid="number-display">{formattedValue}</AutoScalingText>
       </div>
     )
   }
