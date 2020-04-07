@@ -436,3 +436,70 @@ On this section we will check the approach that we need to do an integration tes
 First if you are making any request on your component you will need to `mock` the modules that allow you to preform that request because we don't want to prefrom a network request on this test we wait to have a `end to end` test for that.
 
 Also an important thing to take on notice is when you are `render` a component that use `redux`, `react router`, etc; anything that expose a provider you will need to render with that provider. In the example it use `renderWithRouter` that is a function that will help us to provide all the context that the component need to render. So you will want to have files that have this utilities that are especific for testing your app in every project.
+
+## Section 6: Configuring Cypress
+
+In this section, we will check a useful tool to do `end to end` testing call `cypress`. With this tool you gonna have the change to have a tool with a simple UI that gonna perform your test in the browser and you can see step by step.
+
+### Steps to install cypress
+
+First, you need to install de `cypress` dependency and save it as a `dev` dependency using:
+`npm install --save-dev cypress`
+
+It will install an app and stick that on your `node_modules` for that reason it will take a while and will expose a binary file so this means that you can use the `npx` command to run `cypress` after install. Use the following command to run the example:
+`npx cypress open`
+
+This will create a new directory call `cypress` and display the UI with the test project that is pre-existing with the installation. Click on the `Run All Test` button and automatically will open the browser a run all the example tests.
+
+### Cypress directory and  configuration file
+
+Like we said before `cypress` will install a directory on your root which are the following:
+- fixture => Will contain a `json` that you can store static data that you can reference later on your test
+- integration => All your test will live on this directory
+- plugins => To add your plugins
+- support => Store your custom commands
+
+Also `cypress` will add a configuration file on your root call `cypress.json` where you gonna put some config to add your current app instead of the example one.
+
+### Add your app in the cypress config and chage the test directory name
+
+Just need to go to the `cypress.json` and add the following options:
+```js
+{
+  "baseUrl": "http://your.current.app.url:8080",
+  "integrationFolder": "cypress/e2e"
+}
+```
+
+#### Note: 
+
+.- Need to remove your old `integration` folder.
+- In our example, we use the `calculator.js` file in the `e2e` directory and we use some function like `getByText` so we need to add another dependency for those kinds of functions
+`npm install --save-dev cypress-testing-library`
+- Then go to the `support` directory and on the `index.js` file `import` the library like this:
+`import 'cypress-testing-library/add-commands'`
+- Also on this example, we add a `test-id` to a component and use `getByTestId` function to get that element in our test. When you see that command on the `console` of the browser you will see the element with the `test-id` but on the `DOM` you will see the element like normally is without the `test-id`.
+
+Now you can run your app then use the `npx` command if you close the `cypress` UI if not the `cypress` UI should update immediately using your app.
+
+Finally, notice that you can see each step of the test and see the `DOM` state in each moment and when your test is finished you can interact with your app normally that's why we add the `clean` function if we need it on a `beforeEach` instead of an `afterEach` so when you got an error you can have the state at that moment.
+
+### Add script to automaticy the process of running cypress
+
+First install the `npm-run-all` dependecy to run scripts in parallel:
+`npm install --save-dev npm-run-all`
+
+Then go to your `package.json` and add your scripts:
+```js
+"scripts": {
+    "test:e2e:dev": "npm-run-all --parallel dev cy:open",
+    "test:e2e": "npm-run-all --parallel --race start cy:run",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "dev": "webpack-dev-server --mode=development",
+    "build": "webpack --mode=production",
+    "start": "serve -s dist --port 8080"
+},
+```
+
+The first one `test:e2e:dev` is like the commands that we run before mannually and the `test:e2e` is the one that we gonna run on CI enviroment that will have the `--race` command that will close the process as soon it ends so not continue watching the files.
